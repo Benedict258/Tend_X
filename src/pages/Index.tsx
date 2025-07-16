@@ -1,11 +1,177 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+import { User, Settings, Plus, QrCode, Calendar, Users } from 'lucide-react';
 
 const Index = () => {
+  const { profile } = useAuth();
+
+  const isAdmin = profile?.role === 'admin';
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Welcome to TendX
+            </h1>
+            <p className="text-xl text-muted-foreground mt-2">
+              Hello, {profile?.full_name}! 
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Badge variant={isAdmin ? 'default' : 'secondary'}>
+              {isAdmin ? 'Admin' : 'User'}
+            </Badge>
+            <Link to="/profile">
+              <Button variant="outline" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Profile
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {isAdmin && (
+            <>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Plus className="h-5 w-5 text-primary" />
+                    Create Space
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    Create a new attendance space for your class, event, or custom purpose.
+                  </p>
+                  <Button className="w-full">
+                    Create New Space
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <QrCode className="h-5 w-5 text-primary" />
+                    Manage Attendance
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    View and manage attendance records for your spaces.
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    View Attendance
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-primary" />
+                    Create Event
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    Create and manage events with attendance tracking.
+                  </p>
+                  <Button variant="outline" className="w-full">
+                    Create Event
+                  </Button>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <QrCode className="h-5 w-5 text-accent" />
+                Join Space
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Scan QR code or enter code to join an attendance space.
+              </p>
+              <Button variant="outline" className="w-full">
+                Scan QR Code
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-accent" />
+                Communities
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Join or create communities to connect with others.
+              </p>
+              <Button variant="outline" className="w-full">
+                View Communities
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5 text-accent" />
+                My History
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                View your attendance history and profile information.
+              </p>
+              <Button variant="outline" className="w-full">
+                View History
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="mt-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">0</div>
+                  <div className="text-sm text-muted-foreground">
+                    {isAdmin ? 'Created Spaces' : 'Joined Spaces'}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-accent">0</div>
+                  <div className="text-sm text-muted-foreground">
+                    {isAdmin ? 'Total Attendees' : 'Attendance Records'}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-primary">0</div>
+                  <div className="text-sm text-muted-foreground">
+                    {isAdmin ? 'Active Events' : 'Communities Joined'}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
