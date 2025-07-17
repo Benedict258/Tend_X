@@ -14,6 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance_records: {
+        Row: {
+          fields: Json
+          id: string
+          ip_address: unknown | null
+          space_id: string
+          submitted_at: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          fields?: Json
+          id?: string
+          ip_address?: unknown | null
+          space_id: string
+          submitted_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          fields?: Json
+          id?: string
+          ip_address?: unknown | null
+          space_id?: string
+          submitted_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_space_id_fkey"
+            columns: ["space_id"]
+            isOneToOne: false
+            referencedRelation: "spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spaces: {
+        Row: {
+          admin_id: string
+          created_at: string
+          end_time: string | null
+          id: string
+          public_link: string
+          qr_code: string | null
+          required_fields: Json | null
+          start_time: string | null
+          status: string
+          title: string
+          type: string
+          unique_code: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          end_time?: string | null
+          id?: string
+          public_link: string
+          qr_code?: string | null
+          required_fields?: Json | null
+          start_time?: string | null
+          status?: string
+          title: string
+          type: string
+          unique_code: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          end_time?: string | null
+          id?: string
+          public_link?: string
+          qr_code?: string | null
+          required_fields?: Json | null
+          start_time?: string | null
+          status?: string
+          title?: string
+          type?: string
+          unique_code?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           bio: string | null
@@ -61,6 +147,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_space_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_user_id: {
         Args: Record<PropertyKey, never>
         Returns: string

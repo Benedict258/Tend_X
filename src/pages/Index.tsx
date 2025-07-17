@@ -2,11 +2,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, Settings, Plus, QrCode, Calendar, Users } from 'lucide-react';
 
 const Index = () => {
   const { profile } = useAuth();
+  const navigate = useNavigate();
 
   const isAdmin = profile?.role === 'admin';
 
@@ -49,7 +50,7 @@ const Index = () => {
                   <p className="text-muted-foreground mb-4">
                     Create a new attendance space for your class, event, or custom purpose.
                   </p>
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={() => navigate('/create-space')}>
                     Create New Space
                   </Button>
                 </CardContent>
@@ -66,8 +67,8 @@ const Index = () => {
                   <p className="text-muted-foreground mb-4">
                     View and manage attendance records for your spaces.
                   </p>
-                  <Button variant="outline" className="w-full">
-                    View Attendance
+                  <Button variant="outline" className="w-full" onClick={() => navigate('/dashboard')}>
+                    View Dashboard
                   </Button>
                 </CardContent>
               </Card>

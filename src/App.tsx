@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Profile from "./pages/auth/Profile";
+import CreateSpace from "./pages/CreateSpace";
+import Dashboard from "./pages/Dashboard";
+import AttendanceSubmission from "./pages/AttendanceSubmission";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +42,23 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/create-space" 
+              element={
+                <ProtectedRoute>
+                  <CreateSpace />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/attend/:code" element={<AttendanceSubmission />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
