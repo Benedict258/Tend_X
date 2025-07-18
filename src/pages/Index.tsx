@@ -39,7 +39,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {isAdmin && (
             <>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/create-space')}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Plus className="h-5 w-5 text-primary" />
@@ -56,7 +56,7 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/dashboard')}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <QrCode className="h-5 w-5 text-primary" />
@@ -77,15 +77,18 @@ const Index = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Calendar className="h-5 w-5 text-primary" />
-                    Create Event
+                    Quick Join
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    Create and manage events with attendance tracking.
+                    Enter an attendance code to quickly join a session.
                   </p>
-                  <Button variant="outline" className="w-full">
-                    Create Event
+                  <Button variant="outline" className="w-full" onClick={() => {
+                    const code = prompt('Enter attendance code:');
+                    if (code) navigate(`/attend/${code}`);
+                  }}>
+                    Enter Code
                   </Button>
                 </CardContent>
               </Card>
