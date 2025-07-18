@@ -12,6 +12,9 @@ import Profile from "./pages/auth/Profile";
 import CreateSpace from "./pages/CreateSpace";
 import Dashboard from "./pages/Dashboard";
 import AttendanceSubmission from "./pages/AttendanceSubmission";
+import Communities from "./pages/Communities";
+import CommunityDetail from "./pages/CommunityDetail";
+import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +62,30 @@ const App = () => (
               } 
             />
             <Route path="/attend/:code" element={<AttendanceSubmission />} />
+            <Route 
+              path="/communities" 
+              element={
+                <ProtectedRoute>
+                  <Communities />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/community/:id" 
+              element={
+                <ProtectedRoute>
+                  <CommunityDetail />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/notifications" 
+              element={
+                <ProtectedRoute>
+                  <Notifications />
+                </ProtectedRoute>
+              } 
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

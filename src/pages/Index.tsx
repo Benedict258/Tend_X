@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Settings, Plus, QrCode, Calendar, Users } from 'lucide-react';
+import { User, Settings, Plus, QrCode, Calendar, Users, Bell, MessageSquare } from 'lucide-react';
 
 const Index = () => {
   const { profile } = useAuth();
@@ -112,7 +112,7 @@ const Index = () => {
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/communities')}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-accent" />
@@ -123,8 +123,25 @@ const Index = () => {
               <p className="text-muted-foreground mb-4">
                 Join or create communities to connect with others.
               </p>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" onClick={() => navigate('/communities')}>
                 View Communities
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/notifications')}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="h-5 w-5 text-accent" />
+                Notifications
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Stay updated with invites and announcements.
+              </p>
+              <Button variant="outline" className="w-full" onClick={() => navigate('/notifications')}>
+                View Notifications
               </Button>
             </CardContent>
           </Card>
