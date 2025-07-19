@@ -3,13 +3,22 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Settings, Plus, QrCode, Calendar, Users, Bell, MessageSquare } from 'lucide-react';
+import { User, Settings, Plus, QrCode, Calendar, Users, Bell, MessageSquare, LogOut } from 'lucide-react';
 
 const Index = () => {
-  const { profile } = useAuth();
+  const { profile, signOut } = useAuth();
   const navigate = useNavigate();
 
   const isAdmin = profile?.role === 'admin';
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,19 +29,31 @@ const Index = () => {
               Welcome to TendX
             </h1>
             <p className="text-xl text-muted-foreground mt-2">
-              Hello, {profile?.full_name}! 
+              Welcome back, {profile?.full_name || 'User'}! Ready to manage attendance?
             </p>
           </div>
           <div className="flex items-center gap-4">
             <Badge variant={isAdmin ? 'default' : 'secondary'}>
               {isAdmin ? 'Admin' : 'User'}
             </Badge>
-            <Link to="/profile">
-              <Button variant="outline" className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                Profile
+            <div className="flex items-center gap-2">
+              <Link to="/profile">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Profile
+                </Button>
+              </Link>
+              <Link to="/settings">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </Button>
+              </Link>
+              <Button variant="outline" onClick={handleSignOut} className="flex items-center gap-2">
+                <LogOut className="h-4 w-4" />
+                Logout
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
 
@@ -146,19 +167,19 @@ const Index = () => {
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/settings')}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Settings className="h-5 w-5 text-accent" />
-                My History
+                Settings
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                View your attendance history and profile information.
+                Manage your account preferences and security settings.
               </p>
-              <Button variant="outline" className="w-full">
-                View History
+              <Button variant="outline" className="w-full" onClick={() => navigate('/settings')}>
+                Open Settings
               </Button>
             </CardContent>
           </Card>
