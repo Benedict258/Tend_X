@@ -125,10 +125,17 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Scan QR code or enter code to join an attendance space.
+                Enter an attendance code to join a session.
               </p>
-              <Button variant="outline" className="w-full">
-                Scan QR Code
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => {
+                  const code = prompt('Enter attendance code:');
+                  if (code) navigate(`/attend/${code}`);
+                }}
+              >
+                Enter Code
               </Button>
             </CardContent>
           </Card>
