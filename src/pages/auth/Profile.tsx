@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { AlertCircle, CheckCircle, User, LogOut, Camera, Upload } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { uploadAvatar } from '@/lib/imageUpload';
+import { ImageUpload } from '@/components/ui/image-upload';
 
 const Profile = () => {
   const { profile, updateProfile, signOut } = useAuth();
@@ -23,7 +24,8 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -60,54 +62,22 @@ const Profile = () => {
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file || !profile) return;
+    await handleAvatarUpload(file);
+  };
 
-    // Check file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('File size must be less than 5MB');
-      return;
-    }
-
-    // Check file type
-    if (!file.type.startsWith('image/')) {
-      setError('Please select an image file');
-      return;
-    }
-
-    setUploadingImage(true);
-    setError('');
-
+  const handleAvatarUpload = async (file: File) => {
+    if (!profile) return;
+    
+    setUploadingAvatar(true);
+    setUploadError('');
     try {
-      // Create unique filename
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${profile?.id}-${Date.now()}.${fileExt}`;
-
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('profile-pictures')
-        .upload(fileName, file, {
-          upsert: true
-        });
-
-      if (uploadError) throw uploadError;
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('profile-pictures')
-        .getPublicUrl(fileName);
-
-      // Update user profile with new image URL
-      const { error: updateError } = await updateProfile({ 
-        profile_picture: publicUrl 
-      });
-
-      if (updateError) throw updateError;
-
-      setSuccess('Profile picture updated successfully!');
+      await uploadAvatar(profile.id, file);
+      setSuccess('Avatar updated successfully!');
     } catch (err: any) {
-      setError(err.message || 'Failed to upload image');
+      setUploadError(err.message || 'Failed to upload avatar');
     } finally {
-      setUploadingImage(false);
+      setUploadingAvatar(false);
     }
   };
 
@@ -135,41 +105,16 @@ const Profile = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Profile Picture Section */}
-            <div className="flex flex-col items-center mb-6">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                  {profile.profile_picture ? (
-                    <img 
-                      src={profile.profile_picture} 
-                      alt="Profile" 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <User className="h-12 w-12 text-muted-foreground" />
-                  )}
-                </div>
-                <label 
-                  htmlFor="profile-image" 
-                  className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary-hover transition-colors"
-                >
-                  <Camera className="h-4 w-4" />
-                </label>
-                <input
-                  id="profile-image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  disabled={uploadingImage}
-                />
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                Click the camera icon to upload a new profile picture
-              </p>
-              {uploadingImage && (
-                <p className="text-sm text-primary">Uploading...</p>
-              )}
+            {/* Avatar Upload Section */}
+            <div className="flex justify-center mb-6">
+              <ImageUpload
+                variant="avatar"
+                currentImageUrl={profile.avatar_url || profile.profile_picture}
+                onImageSelect={handleAvatarUpload}
+                isUploading={uploadingAvatar}
+                error={uploadError}
+                className="flex flex-col items-center"
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
