@@ -48,6 +48,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
+      // Include user metadata that will be used by the trigger
       const { error } = await signUp(formData.email, formData.password, {
         full_name: formData.full_name,
         role: formData.role,
@@ -59,6 +60,8 @@ const Signup = () => {
       if (error) {
         setError(error.message || 'Sign up failed');
       } else {
+        // Show success message
+        setError('');
         navigate('/');
       }
     } catch (err) {

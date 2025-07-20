@@ -54,6 +54,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      console.log('Fetching user profile for ID:', userId);
+      
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -62,18 +64,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) {
         console.error('Error fetching user profile:', error);
-        console.error('Full error details:', JSON.stringify(error, null, 2));
+        
+        // If user doesn't exist, try to create one
+        if (error.code === 'PGRST116' || !data) {
+          console.log('User profile not found, attempting to create one...');
+          return await createUserProfile(userId);
+        }
         return null;
       }
 
       if (!data) {
-        console.warn('No user profile found for user ID:', userId);
-        return null;
+        console.log('No user profile found, attempting to create one...');
+        return await createUserProfile(userId);
       }
 
+      console.log('User profile found:', data);
       return data;
     } catch (error) {
       console.error('Error fetching user profile:', error);
+      return null;
+    }
+  };
+
+  const createUserProfile = async (userId: string) => {
+    try {
+      // Get user data from auth
+      const { data: authUser } = await supabase.auth.getUser();
+      if (!authUser.user) return null;
+
+      const userData = {
+        id: userId,
+        user_id: `USER-${userId.substring(0, 8)}`,
+        email: authUser.user.email || '',
+        full_name: authUser.user.user_metadata?.full_name || authUser.user.email?.split('@')[0] || 'User',
+        role: (authUser.user.user_metadata?.role as 'admin' | 'user') || 'user',
+        institution: authUser.user.user_metadata?.institution || null,
+        occupation: authUser.user.user_metadata?.occupation || null,
+        bio: authUser.user.user_metadata?.bio || null,
+      };
+
+      const { data, error } = await supabase
+        .from('users')
+        .insert(userData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating user profile:', error);
+        return null;
+      }
+
+      console.log('User profile created successfully:', data);
+      return data;
+    } catch (error) {
+      console.error('Error creating user profile:', error);
       return null;
     }
   };
@@ -87,10 +131,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (session?.user) {
           // Fetch user profile data
-          setTimeout(async () => {
+          const fetchProfile = async () => {
             const userProfile = await fetchUserProfile(session.user.id);
             setProfile(userProfile);
-          }, 0);
+          };
+          fetchProfile();
         } else {
           setProfile(null);
         }
@@ -105,10 +150,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        fetchUserProfile(session.user.id).then(setProfile);
+        fetchUserProfile(session.user.id).then((profile) => {
+          setProfile(profile);
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
