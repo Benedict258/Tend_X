@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/components/ThemeProvider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -21,11 +22,11 @@ import {
 } from 'lucide-react';
 
 const Settings = () => {
-  const { profile, user } = useAuth();
+  const { profile, user, updateProfile } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [autoFillEnabled, setAutoFillEnabled] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -69,43 +70,44 @@ const Settings = () => {
 
   const requestAdminRights = async () => {
     try {
-      // Create a notification for admin review
-      const { error } = await supabase
-        .from('notifications')
-        .insert({
-          title: 'Admin Rights Request',
-          message: `User ${profile?.full_name} (${profile?.email}) has requested admin rights`,
-          type: 'admin_request',
-          user_id: user?.id,
-          data: { 
-            requestedBy: user?.id,
-            userEmail: profile?.email,
-            userName: profile?.full_name 
-          }
-        });
+      // Auto-approve admin rights by updating user profile directly
+      const { error } = await updateProfile({ role: 'admin' });
 
       if (error) throw error;
 
+      // Create a notification for the approval
+      await supabase
+        .from('notifications')
+        .insert({
+          title: 'Admin Rights Approved',
+          message: 'Your admin rights request has been automatically approved',
+          type: 'admin_approved',
+          user_id: user?.id,
+          data: { 
+            approvedAt: new Date().toISOString(),
+            autoApproved: true
+          }
+        });
+
       toast({
-        title: 'Request Submitted',
-        description: 'Your admin rights request has been submitted for review'
+        title: 'Admin Rights Granted',
+        description: 'You now have admin privileges!'
       });
     } catch (err: any) {
       toast({
         title: 'Error',
-        description: 'Failed to submit admin request',
+        description: 'Failed to grant admin rights',
         variant: 'destructive'
       });
     }
   };
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    // Note: You would implement actual theme switching logic here
-    // For now, this is just a UI toggle
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
     toast({
       title: 'Theme Updated',
-      description: `Switched to ${isDarkMode ? 'light' : 'dark'} mode`
+      description: `Switched to ${newTheme} mode`
     });
   };
 
@@ -245,7 +247,7 @@ const Settings = () => {
                 <div className="flex items-center gap-2">
                   <Sun className="h-4 w-4" />
                   <Switch
-                    checked={isDarkMode}
+                    checked={theme === 'dark'}
                     onCheckedChange={toggleTheme}
                   />
                   <Moon className="h-4 w-4" />

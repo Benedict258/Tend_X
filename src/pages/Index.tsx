@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link, useNavigate } from 'react-router-dom';
+import AdminPanel from '@/components/AdminPanel';
 import { User, Settings, Plus, QrCode, Calendar, Users, Bell, MessageSquare, LogOut } from 'lucide-react';
 
 const Index = () => {
@@ -39,7 +40,15 @@ const Index = () => {
             <div className="flex items-center gap-2">
               <Link to="/profile">
                 <Button variant="outline" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
+                  {profile?.profile_picture ? (
+                    <img 
+                      src={profile.profile_picture} 
+                      alt="Profile" 
+                      className="w-4 h-4 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-4 w-4" />
+                  )}
                   Profile
                 </Button>
               </Link>
@@ -56,6 +65,13 @@ const Index = () => {
             </div>
           </div>
         </div>
+
+        {/* Admin Panel */}
+        {isAdmin && (
+          <div className="mb-8">
+            <AdminPanel />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {isAdmin && (

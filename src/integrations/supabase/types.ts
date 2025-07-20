@@ -305,6 +305,7 @@ export type Database = {
           id: string
           institution: string | null
           occupation: string | null
+          phone_number: string | null
           profile_picture: string | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
@@ -318,6 +319,7 @@ export type Database = {
           id?: string
           institution?: string | null
           occupation?: string | null
+          phone_number?: string | null
           profile_picture?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
@@ -331,6 +333,7 @@ export type Database = {
           id?: string
           institution?: string | null
           occupation?: string | null
+          phone_number?: string | null
           profile_picture?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string

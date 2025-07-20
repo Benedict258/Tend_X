@@ -12,6 +12,7 @@ interface UserProfile {
   occupation?: string;
   bio?: string;
   profile_picture?: string;
+  phone_number?: string;
   created_at: string;
   updated_at: string;
 }
