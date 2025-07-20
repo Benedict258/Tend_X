@@ -206,6 +206,7 @@ export type Database = {
           space_id: string | null
           title: string
           updated_at: string
+          image_url: string | null
         }
         Insert: {
           author_id: string
@@ -218,6 +219,7 @@ export type Database = {
           space_id?: string | null
           title: string
           updated_at?: string
+          image_url?: string | null
         }
         Update: {
           author_id?: string
@@ -230,6 +232,7 @@ export type Database = {
           space_id?: string | null
           title?: string
           updated_at?: string
+          image_url?: string | null
         }
         Relationships: [
           {
@@ -306,7 +309,7 @@ export type Database = {
           institution: string | null
           occupation: string | null
           phone_number: string | null
-          profile_picture: string | null
+          avatar_url: string | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
           user_id: string
@@ -320,7 +323,7 @@ export type Database = {
           institution?: string | null
           occupation?: string | null
           phone_number?: string | null
-          profile_picture?: string | null
+          avatar_url?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id: string
@@ -334,7 +337,7 @@ export type Database = {
           institution?: string | null
           occupation?: string | null
           phone_number?: string | null
-          profile_picture?: string | null
+          avatar_url?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id?: string

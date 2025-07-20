@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { Plus, Users, ArrowLeft, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ImageUpload } from '@/components/ui/image-upload';
+import { uploadPostImage } from '@/lib/imageUpload';
 
 interface Community {
   id: string;
@@ -48,8 +50,11 @@ export default function CommunityDetail() {
   const [postData, setPostData] = useState({
     title: '',
     content: '',
-    is_public: true
+    is_public: true,
+    image_url: ''
   });
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imageError, setImageError] = useState('');
 
   useEffect(() => {
     if (id) {
@@ -131,7 +136,8 @@ export default function CommunityDetail() {
           content: postData.content,
           author_id: user.id,
           community_id: id,
-          is_public: postData.is_public
+          is_public: postData.is_public,
+          image_url: postData.image_url || null
         });
 
       if (error) throw error;
@@ -142,7 +148,8 @@ export default function CommunityDetail() {
       });
 
       setShowCreatePost(false);
-      setPostData({ title: '', content: '', is_public: true });
+      setPostData({ title: '', content: '', is_public: true, image_url: '' });
+      setImageError('');
       fetchPosts();
     } catch (error) {
       console.error('Error creating post:', error);
@@ -152,6 +159,27 @@ export default function CommunityDetail() {
         variant: "destructive"
       });
     }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setUploadingImage(true);
+    setImageError('');
+    
+    try {
+      // Create a temporary post ID for the upload path
+      const tempPostId = `temp_${Date.now()}`;
+      const imageUrl = await uploadPostImage(tempPostId, file);
+      setPostData(prev => ({ ...prev, image_url: imageUrl }));
+    } catch (error: any) {
+      setImageError(error.message || 'Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleImageRemove = () => {
+    setPostData(prev => ({ ...prev, image_url: '' }));
+    setImageError('');
   };
 
   if (loading || !community) {
@@ -211,6 +239,16 @@ export default function CommunityDetail() {
                       />
                     </div>
                     <div>
+                      <ImageUpload
+                        variant="post"
+                        currentImageUrl={postData.image_url}
+                        onImageSelect={handleImageUpload}
+                        onImageRemove={handleImageRemove}
+                        isUploading={uploadingImage}
+                        error={imageError}
+                      />
+                    </div>
+                    <div>
                       <label className="text-sm font-medium">Content</label>
                       <Textarea
                         value={postData.content}
@@ -263,6 +301,15 @@ export default function CommunityDetail() {
                     )}
                   </div>
                 </CardHeader>
+                {post.image_url && (
+                  <CardContent className="pt-0">
+                    <img 
+                      src={post.image_url} 
+                      alt="Post image" 
+                      className="w-full max-h-96 object-cover rounded-lg"
+                    />
+                  </CardContent>
+                )}
                 <CardContent>
                   <p className="text-foreground whitespace-pre-wrap">{post.content}</p>
                 </CardContent>
