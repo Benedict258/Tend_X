@@ -62,10 +62,14 @@ export default function AttendanceSubmission() {
 
         if (data.status !== 'open') {
           setError(`This attendance session is ${data.status}`)
-          setSpace({
-            ...data,
-            required_fields: Array.isArray(data.required_fields) ? data.required_fields : []
-          })
+        const parsedFields = typeof data.required_fields === 'string' 
+          ? JSON.parse(data.required_fields || '[]') 
+          : Array.isArray(data.required_fields) ? data.required_fields : []
+        
+        setSpace({
+          ...data,
+          required_fields: parsedFields
+        })
           setLoading(false)
           return
         }
@@ -73,17 +77,25 @@ export default function AttendanceSubmission() {
         // Check if session has ended
         if (data.end_time && new Date(data.end_time) < new Date()) {
           setError('This attendance session has ended')
+          const parsedFields = typeof data.required_fields === 'string' 
+            ? JSON.parse(data.required_fields || '[]') 
+            : Array.isArray(data.required_fields) ? data.required_fields : []
+          
           setSpace({
             ...data,
-            required_fields: Array.isArray(data.required_fields) ? data.required_fields : []
+            required_fields: parsedFields
           })
           setLoading(false)
           return
         }
 
+        const parsedFields = typeof data.required_fields === 'string' 
+          ? JSON.parse(data.required_fields || '[]') 
+          : Array.isArray(data.required_fields) ? data.required_fields : []
+        
         setSpace({
           ...data,
-          required_fields: Array.isArray(data.required_fields) ? data.required_fields : []
+          required_fields: parsedFields
         })
         
         // Pre-fill form with user data if available

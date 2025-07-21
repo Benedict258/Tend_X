@@ -109,7 +109,7 @@ const Profile = () => {
             <div className="flex justify-center mb-6">
               <ImageUpload
                 variant="avatar"
-                currentImageUrl={profile.avatar_url || profile.profile_picture}
+                currentImageUrl={profile.avatar_url || (profile as any).profile_picture}
                 onImageSelect={handleAvatarUpload}
                 isUploading={uploadingAvatar}
                 error={uploadError}

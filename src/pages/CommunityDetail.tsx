@@ -31,6 +31,7 @@ interface Post {
   community_id: string;
   space_id?: string;
   is_public: boolean;
+  images?: string[];
   created_at: string;
   author?: {
     full_name: string;
@@ -137,7 +138,7 @@ export default function CommunityDetail() {
           author_id: user.id,
           community_id: id,
           is_public: postData.is_public,
-          image_url: postData.image_url || null
+          images: postData.image_url ? [postData.image_url] : null
         });
 
       if (error) throw error;
@@ -301,10 +302,10 @@ export default function CommunityDetail() {
                     )}
                   </div>
                 </CardHeader>
-                {post.image_url && (
+                {post.images && post.images.length > 0 && (
                   <CardContent className="pt-0">
                     <img 
-                      src={post.image_url} 
+                      src={post.images[0]} 
                       alt="Post image" 
                       className="w-full max-h-96 object-cover rounded-lg"
                     />

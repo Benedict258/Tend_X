@@ -40,9 +40,9 @@ const Index = () => {
             <div className="flex items-center gap-2">
               <Link to="/profile">
                 <Button variant="outline" className="flex items-center gap-2">
-                  {profile?.profile_picture ? (
+                  {(profile as any)?.profile_picture ? (
                     <img 
-                      src={profile.profile_picture} 
+                      src={(profile as any).profile_picture} 
                       alt="Profile" 
                       className="w-4 h-4 rounded-full object-cover"
                     />
