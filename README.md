@@ -1,73 +1,89 @@
-# Welcome to your Lovable project
+# 🚀 TendX – Smart Event & Attendance Management Web App
 
-## Project info
+> ⚡️ _Where Events Meet Simplicity and Innovation._
 
-**URL**: https://lovable.dev/projects/5dee1192-bb26-43e9-9dd3-442b70510b4b
+---
 
-## How can I edit this code?
+## 🧠 Overview
 
-There are several ways of editing your application.
+**TendX** is an all-in-one web application designed to simplify the creation, management, and tracking of events using **modern tools** and **AI-enhanced features**.
 
-**Use Lovable**
+It allows users to:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5dee1192-bb26-43e9-9dd3-442b70510b4b) and start prompting.
+✅ Create and manage event spaces  
+✅ Submit and verify attendance using QR codes  
+✅ Assign and request admin roles  
+✅ Manage users and participant data  
+✅ Customize profile with bio, image, email, phone, and more  
+✅ Access intuitive dashboards for each event
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## ✨ Key Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- 🔒 **Authentication System**
+  - Secure user sign-up and login
+  - Role-based permissions (Admin & Participant)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- 🖼️ **Landing Page + Core Navigation**
+  - Clean, responsive interface
+  - Smooth navigation bar and routing setup
 
-Follow these steps:
+- 🧾 **Event Space Creation**
+  - Create, edit, and manage events as an admin
+  - Manage participants, attendance, and settings
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- 📲 **Attendance Management**
+  - Auto-generated QR codes for events
+  - Attendance submission and timestamping
+  - Real-time check-in confirmation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- 🎨 **Dark Mode Support** *(currently under fix)*
+  - Toggle between light and dark themes (pending implementation fix)
 
-# Step 3: Install the necessary dependencies.
-npm i
+- 👤 **User Profiles**
+  - Add profile picture, email, phone number, bio, and more
+  - Upload and update personal data
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- 📩 **Admin Role Requests**
+  - Users can request admin rights *(currently auto-approve mode pending fix)*
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🔧 Tech Stack
 
-**Use GitHub Codespaces**
+- **Frontend:** React.js, Tailwind CSS  
+- **Backend:** Node.js, Express.js  
+- **Database:** MongoDB  
+- **Other Tools:** GitHub, QR code libraries, Cloudinary (for profile pics), JWT (for auth)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 🧪 Current Known Issues / TODOs
 
-This project is built with:
+> ⚠️ _Being worked on actively..._
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- [ ] Fix dark mode toggle (no visual effect currently)
+- [ ] Auto-approval logic for admin requests
+- [ ] Profile picture upload not yet linked to dashboard
+- [ ] Add user details: phone number, email fields, editable profile section
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/5dee1192-bb26-43e9-9dd3-442b70510b4b) and click on Share -> Publish.
+## 🔄 Future Enhancements
 
-## Can I connect a custom domain to my Lovable project?
+- 📊 Admin dashboards with analytics (event engagement, attendance trends)
+- 🔔 Email/SMS notifications for events
+- ⏱️ Scheduled events with countdowns
+- 📥 Export attendance reports (CSV/PDF)
+- 💬 Chat/comment thread inside event spaces
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🤖 AI-Powered Features (Planned)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Smart attendance verification  
+- Face-based check-in options  
+- Personalized event suggestions  
+- Smart reminders and automation for event updates
+Live Link()[https://tendx.onrender.com]
